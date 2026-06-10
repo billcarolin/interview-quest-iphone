@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<style>
+ text { font-family: Arial, sans-serif; fill: #172033; }
+ .title { font-size: 34px; font-weight: 700; }
+ .subtitle { font-size: 20px; fill: #4b5870; }
+ .box { fill: #eef4ff; stroke: #496a9f; stroke-width: 2; rx: 18; }
+ .box2 { fill: #f2fbf5; stroke: #4b8761; stroke-width: 2; rx: 18; }
+ .label { font-size: 21px; font-weight: 700; text-anchor: middle; }
+ .small { font-size: 17px; text-anchor: middle; fill: #3c4a60; }
+ .footer { font-size: 18px; fill: #44516a; }
+ .arrow { stroke: #56677f; stroke-width: 4; fill: none; marker-end: url(#arrowhead); }
+</style>
+<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#56677f"/></marker></defs>
+<rect width="1200" height="720" fill="#ffffff"/>
+<text x="60" y="70" class="title">Spring Cloud Config: centralized configuration</text>
+<text x="60" y="108" class="subtitle">Keep environment-specific settings outside each deployed service and retrieve them through a central HTTP API.</text>
+<rect x="60" y="220" width="230" height="150" class="box"/><text x="175.0" y="262" class="label">Config repository</text><text x="175.0" y="298" class="small">Git, filesystem, </text><text x="175.0" y="323" class="small"> Vault, JDBC, etc.</text><rect x="370" y="220" width="250" height="150" class="box2"/><text x="495.0" y="262" class="label">Config Server</text><text x="495.0" y="298" class="small">@EnableConfigServer </text><text x="495.0" y="323" class="small"> HTTP property API</text><rect x="710" y="150" width="220" height="120" class="box"/><text x="820.0" y="192" class="label">Service A</text><text x="820.0" y="228" class="small">spring.config.import </text><text x="820.0" y="253" class="small"> app name + profile</text><rect x="710" y="320" width="220" height="120" class="box2"/><text x="820.0" y="362" class="label">Service B</text><text x="820.0" y="398" class="small">spring.config.import </text><text x="820.0" y="423" class="small"> app name + profile</text><rect x="1010" y="220" width="150" height="150" class="box"/><text x="1085.0" y="262" class="label">Runtime</text><text x="1085.0" y="298" class="small">Spring </text><text x="1085.0" y="323" class="small"> Environment</text><path d="M 290 295 L 365 295" class="arrow"/><path d="M 620 285 L 700 210" class="arrow"/><path d="M 620 305 L 700 380" class="arrow"/><path d="M 930 210 L 1000 270" class="arrow"/><path d="M 930 380 L 1000 320" class="arrow"/><text x="60" y="675" class="footer">Code map: config-server exposes properties; config-client imports them and binds values into @ConfigurationProperties.</text></svg>

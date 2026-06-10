@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#11224a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Interview Quest" />
+  <link rel="apple-touch-icon" href="assets/icon-180.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Interview Quest</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Senior Engineer Training</p>
+        <h1>Interview Quest</h1>
+      </div>
+      <button id="resetBtn" class="ghost small" type="button">Reset</button>
+    </header>
+
+    <section id="homeView" class="view active">
+      <section class="hero card">
+        <div>
+          <p class="eyebrow">Level up one answer at a time</p>
+          <h2>Ready, Bill?</h2>
+          <p>Practice Java, algorithms, Spring, distributed systems, and leadership questions in fast mobile rounds.</p>
+        </div>
+        <div class="level-badge"><span id="levelValue">1</span><small>LEVEL</small></div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat card"><strong id="xpValue">0</strong><span>XP</span></article>
+        <article class="stat card"><strong id="streakValue">0</strong><span>Best streak</span></article>
+        <article class="stat card"><strong id="masteredValue">0</strong><span>Mastered</span></article>
+      </section>
+
+      <section class="section-title"><h2>Choose a mission</h2></section>
+      <section class="mode-grid">
+        <button class="mode card" data-mode="quick" type="button"><span class="mode-icon">⚡</span><b>Quick Drill</b><small>5 mixed questions</small></button>
+        <button class="mode card" data-mode="patterns" type="button"><span class="mode-icon">🧩</span><b>Pattern Match</b><small>8 algorithm + Java questions</small></button>
+        <button class="mode card" data-mode="architecture" type="button"><span class="mode-icon">🏗️</span><b>Architecture Run</b><small>8 distributed systems + Spring questions</small></button>
+        <button class="mode card boss" data-mode="boss" type="button"><span class="mode-icon">🐉</span><b>Boss Battle</b><small>12 questions, 3 hearts</small></button>
+      </section>
+
+      <section class="section-title split"><h2>Study tools</h2><button id="studyBtn" class="link-btn" type="button">Open deck →</button></section>
+      <section class="card tip"><b>Tip:</b> Say your reasoning aloud before tapping an answer. The explanation screen is the real practice.</section>
+      <section class="install card"><b>Install on iPhone</b><p>Open in Safari, tap Share, then choose <em>Add to Home Screen</em>.</p></section>
+    </section>
+
+    <section id="gameView" class="view">
+      <div class="game-head">
+        <button id="quitBtn" class="ghost small" type="button">← Exit</button>
+        <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+        <div id="hearts" class="hearts"></div>
+      </div>
+      <section class="card question-card">
+        <div class="question-meta"><span id="categoryPill" class="pill"></span><span id="difficultyPill" class="pill muted"></span></div>
+        <h2 id="questionText"></h2>
+        <div id="choiceList" class="choices"></div>
+      </section>
+      <section id="feedbackCard" class="card feedback hidden">
+        <h3 id="feedbackTitle"></h3>
+        <p id="feedbackText"></p>
+        <div class="pattern-box"><b>Pattern</b><span id="patternText"></span></div>
+        <div class="pattern-box"><b>Use it for</b><span id="useText"></span></div>
+        <pre id="codeBlock" class="code hidden"><code></code></pre>
+        <button id="nextBtn" class="primary" type="button">Next question</button>
+      </section>
+    </section>
+
+    <section id="resultView" class="view">
+      <section class="card result-card">
+        <div id="resultIcon" class="result-icon">🏆</div>
+        <p class="eyebrow">Mission complete</p>
+        <h2 id="resultTitle">Nice work</h2>
+        <p id="resultSummary"></p>
+        <div class="result-stats">
+          <div><strong id="resultCorrect">0</strong><span>Correct</span></div>
+          <div><strong id="resultXp">0</strong><span>XP earned</span></div>
+          <div><strong id="resultBest">0</strong><span>Best streak</span></div>
+        </div>
+        <button id="homeBtn" class="primary" type="button">Back to missions</button>
+      </section>
+    </section>
+
+    <section id="studyView" class="view">
+      <div class="study-head"><button id="studyBackBtn" class="ghost small" type="button">← Home</button><h2>Study Deck</h2></div>
+      <div class="filter-row" id="filterRow"></div>
+      <div id="studyList" class="study-list"></div>
+      <a class="reference-link" href="reference/docs/infographics/index.html">Open visual reference docs →</a>
+    </section>
+  </main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

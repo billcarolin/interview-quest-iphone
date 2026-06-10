@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<style>
+ text { font-family: Arial, sans-serif; fill: #172033; }
+ .title { font-size: 34px; font-weight: 700; }
+ .subtitle { font-size: 20px; fill: #4b5870; }
+ .box { fill: #eef4ff; stroke: #496a9f; stroke-width: 2; rx: 18; }
+ .box2 { fill: #f2fbf5; stroke: #4b8761; stroke-width: 2; rx: 18; }
+ .label { font-size: 21px; font-weight: 700; text-anchor: middle; }
+ .small { font-size: 17px; text-anchor: middle; fill: #3c4a60; }
+ .footer { font-size: 18px; fill: #44516a; }
+ .arrow { stroke: #56677f; stroke-width: 4; fill: none; marker-end: url(#arrowhead); }
+</style>
+<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#56677f"/></marker></defs>
+<rect width="1200" height="720" fill="#ffffff"/>
+<text x="60" y="70" class="title">Lambdas with Java collections</text>
+<text x="60" y="108" class="subtitle">Pass small pieces of behavior into reusable collection operations instead of writing repetitive loops.</text>
+<rect x="60" y="220" width="220" height="150" class="box"/><text x="170.0" y="262" class="label">Tickets</text><text x="170.0" y="298" class="small">priority </text><text x="170.0" y="323" class="small"> timestamp </text><text x="170.0" y="348" class="small"> category</text><rect x="350" y="150" width="230" height="120" class="box2"/><text x="465.0" y="192" class="label">Comparator lambda</text><text x="465.0" y="228" class="small">sort priority desc </text><text x="465.0" y="253" class="small"> then oldest first</text><rect x="350" y="320" width="230" height="120" class="box"/><text x="465.0" y="362" class="label">Predicate lambda</text><text x="465.0" y="398" class="small">filter priority &gt;= 2</text><rect x="670" y="220" width="230" height="150" class="box2"/><text x="785.0" y="262" class="label">Grouping collector</text><text x="785.0" y="298" class="small">count tickets </text><text x="785.0" y="323" class="small"> by category</text><rect x="980" y="220" width="170" height="150" class="box"/><text x="1065.0" y="262" class="label">Result</text><text x="1065.0" y="298" class="small">ordered work </text><text x="1065.0" y="323" class="small"> selected work </text><text x="1065.0" y="348" class="small"> summary counts</text><path d="M 280 270 L 340 210" class="arrow"/><path d="M 280 320 L 340 380" class="arrow"/><path d="M 580 210 L 660 270" class="arrow"/><path d="M 580 380 L 660 320" class="arrow"/><path d="M 900 295 L 970 295" class="arrow"/><text x="60" y="675" class="footer">Code map: Comparator, Predicate, method reference, and groupingBy are common interview-ready examples.</text></svg>

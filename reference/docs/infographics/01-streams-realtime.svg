@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<style>
+ text { font-family: Arial, sans-serif; fill: #172033; }
+ .title { font-size: 34px; font-weight: 700; }
+ .subtitle { font-size: 20px; fill: #4b5870; }
+ .box { fill: #eef4ff; stroke: #496a9f; stroke-width: 2; rx: 18; }
+ .box2 { fill: #f2fbf5; stroke: #4b8761; stroke-width: 2; rx: 18; }
+ .label { font-size: 21px; font-weight: 700; text-anchor: middle; }
+ .small { font-size: 17px; text-anchor: middle; fill: #3c4a60; }
+ .footer { font-size: 18px; fill: #44516a; }
+ .arrow { stroke: #56677f; stroke-width: 4; fill: none; marker-end: url(#arrowhead); }
+</style>
+<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#56677f"/></marker></defs>
+<rect width="1200" height="720" fill="#ffffff"/>
+<text x="60" y="70" class="title">Java Streams API: process a telemetry window</text>
+<text x="60" y="108" class="subtitle">Use a pipeline when a current batch of events needs filtering, normalization, aggregation, and ranking.</text>
+<rect x="60" y="220" width="250" height="150" class="box"/><text x="185.0" y="262" class="label">Telemetry batch</text><text x="185.0" y="298" class="small">rideId </text><text x="185.0" y="323" class="small"> wait time </text><text x="185.0" y="348" class="small"> status </text><text x="185.0" y="373" class="small"> observedAt</text><rect x="370" y="220" width="210" height="150" class="box2"/><text x="475.0" y="262" class="label">filter(...)</text><text x="475.0" y="298" class="small">keep only </text><text x="475.0" y="323" class="small"> operational rides</text><rect x="640" y="220" width="210" height="150" class="box"/><text x="745.0" y="262" class="label">collect(...)</text><text x="745.0" y="298" class="small">latest reading </text><text x="745.0" y="323" class="small"> per ride</text><rect x="910" y="220" width="230" height="150" class="box2"/><text x="1025.0" y="262" class="label">sorted + limit</text><text x="1025.0" y="298" class="small">dashboard ranking </text><text x="1025.0" y="323" class="small"> longest waits</text><path d="M 310 295 L 365 295" class="arrow"/><path d="M 580 295 L 635 295" class="arrow"/><path d="M 850 295 L 905 295" class="arrow"/><text x="60" y="675" class="footer">Code map: Stream source → intermediate operations → terminal operation. Real message delivery still belongs to Kafka, SQS, Pub/Sub, or another broker.</text></svg>

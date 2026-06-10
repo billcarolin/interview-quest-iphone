@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<style>
+ text { font-family: Arial, sans-serif; fill: #172033; }
+ .title { font-size: 34px; font-weight: 700; }
+ .subtitle { font-size: 20px; fill: #4b5870; }
+ .box { fill: #eef4ff; stroke: #496a9f; stroke-width: 2; rx: 18; }
+ .box2 { fill: #f2fbf5; stroke: #4b8761; stroke-width: 2; rx: 18; }
+ .label { font-size: 21px; font-weight: 700; text-anchor: middle; }
+ .small { font-size: 17px; text-anchor: middle; fill: #3c4a60; }
+ .footer { font-size: 18px; fill: #44516a; }
+ .arrow { stroke: #56677f; stroke-width: 4; fill: none; marker-end: url(#arrowhead); }
+</style>
+<defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#56677f"/></marker></defs>
+<rect width="1200" height="720" fill="#ffffff"/>
+<text x="60" y="70" class="title">Circuit breaker: contain downstream failure</text>
+<text x="60" y="108" class="subtitle">Stop repeatedly calling an unhealthy dependency and recover gradually instead of causing cascading failures.</text>
+<rect x="60" y="220" width="210" height="150" class="box"/><text x="165.0" y="262" class="label">Your service</text><text x="165.0" y="298" class="small">request inventory </text><text x="165.0" y="323" class="small"> for SKU</text><rect x="340" y="220" width="230" height="150" class="box2"/><text x="455.0" y="262" class="label">Circuit breaker</text><text x="455.0" y="298" class="small">CLOSED → OPEN </text><text x="455.0" y="323" class="small"> → HALF-OPEN</text><rect x="660" y="150" width="230" height="120" class="box"/><text x="775.0" y="192" class="label">Healthy path</text><text x="775.0" y="228" class="small">call downstream </text><text x="775.0" y="253" class="small"> return live value</text><rect x="660" y="320" width="230" height="120" class="box2"/><text x="775.0" y="362" class="label">Fallback path</text><text x="775.0" y="398" class="small">return safe default </text><text x="775.0" y="423" class="small"> or controlled error</text><rect x="980" y="220" width="170" height="150" class="box"/><text x="1065.0" y="262" class="label">Caller</text><text x="1065.0" y="298" class="small">fast response </text><text x="1065.0" y="323" class="small"> protected system</text><path d="M 270 295 L 335 295" class="arrow"/><path d="M 570 270 L 650 210" class="arrow"/><path d="M 570 320 L 650 380" class="arrow"/><path d="M 890 210 L 970 270" class="arrow"/><path d="M 890 380 L 970 320" class="arrow"/><text x="60" y="675" class="footer">Code map: circuitBreakerFactory.create("inventory").run(liveCall, fallback). Metrics help tune thresholds and observe behavior.</text></svg>
