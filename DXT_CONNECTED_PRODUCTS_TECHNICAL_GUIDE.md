@@ -1,6 +1,6 @@
-# Disney Experiences Connected Products — Technical Interview Guide
+# Experiences Connected Products — Technical Interview Guide
 
-This study track is tailored to the supplied Lead Software Engineer description for Disney Experiences Technology & Digital (DXT), Connected Products.
+This study track is tailored to the supplied Lead Software Engineer description for Experiences Technology & Digital (DXT), Connected Products.
 
 ## Strongest technical themes to rehearse aloud
 
