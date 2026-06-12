@@ -6,17 +6,19 @@ const STORAGE = 'interviewQuestStateV1';
 let state = loadState();
 let game = null;
 
-function defaultState(){ return {xp:0,bestStreak:0,mastered:{},history:{}}; }
+function defaultState(){ return {name:'Player One',xp:0,bestStreak:0,mastered:{},history:{}}; }
 function loadState(){ try{return {...defaultState(),...(JSON.parse(localStorage.getItem(STORAGE))||{})};}catch{return defaultState();} }
 function saveState(){ localStorage.setItem(STORAGE, JSON.stringify(state)); }
 function showView(id){ views.forEach(v=>$(v).classList.toggle('active', v===id)); window.scrollTo({top:0,behavior:'smooth'}); }
 function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
 function level(){ return Math.floor(state.xp/120)+1; }
-function refreshHome(){ $('xpValue').textContent=state.xp; $('streakValue').textContent=state.bestStreak; $('masteredValue').textContent=Object.keys(state.mastered).length; $('levelValue').textContent=level(); }
+function refreshHome(){ $('playerName').textContent=state.name||'Player One'; $('xpValue').textContent=state.xp; $('streakValue').textContent=state.bestStreak; $('masteredValue').textContent=Object.keys(state.mastered).length; $('levelValue').textContent=level(); }
+function editName(){ const next=(prompt('What should we call you?', state.name||'Player One')||'').trim(); if(!next)return; state.name=next.slice(0,24); saveState(); refreshHome(); }
 function selectQuestions(mode){
  let pool=bank, count=5, hearts=99;
  if(mode==='patterns'){pool=bank.filter(q=>['Algorithms','Java'].includes(q.category));count=8;}
  if(mode==='architecture'){pool=bank.filter(q=>['Architecture','Spring'].includes(q.category));count=8;}
+ if(mode==='dxt'){pool=bank.filter(q=>q.track==='DXT');count=12;}
  if(mode==='boss'){pool=bank.filter(q=>q.difficulty!=='Warm-up');count=12;hearts=3;}
  return {items:shuffle(pool).slice(0,Math.min(count,pool.length)),hearts};
 }
@@ -42,6 +44,7 @@ function renderStudy(filter='All'){
 }
 function escapeHtml(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>startGame(b.dataset.mode)));
-$('nextBtn').addEventListener('click',next); $('quitBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('homeBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('studyBtn').addEventListener('click',()=>{renderStudy();showView('studyView')}); $('studyBackBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('resetBtn').addEventListener('click',()=>{if(confirm('Reset XP and mastered-question progress?')){state=defaultState();saveState();refreshHome();}});
+$('playerName').addEventListener('click',editName);
+$('nextBtn').addEventListener('click',next); $('quitBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('homeBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('studyBtn').addEventListener('click',()=>{renderStudy();showView('studyView')}); $('studyBackBtn').addEventListener('click',()=>{refreshHome();showView('homeView')}); $('resetBtn').addEventListener('click',()=>{if(confirm('Reset XP and mastered-question progress?')){state={...defaultState(),name:state.name};saveState();refreshHome();}});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));}
 refreshHome();

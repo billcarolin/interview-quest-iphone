@@ -498,5 +498,623 @@ window.QUESTION_BANK = [
     "explanation": "Comparator logic establishes queue order. A BlockingQueue safely coordinates producer and worker threads. ExecutorService manages the pool.",
     "pattern": "Priority dispatch worker pool",
     "use": "Job schedulers, customer-support work queues"
+  },
+  {
+    "id": "dxt-flink-event-time-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Edge-device events can arrive late or out of order. In Apache Flink, which concept lets windows reflect when the event actually occurred rather than when the processor received it?",
+    "choices": [
+      "Event time with watermarks",
+      "Only wall-clock processing time",
+      "A larger Java heap only",
+      "A synchronous REST callback"
+    ],
+    "answer": 0,
+    "explanation": "Event time uses timestamps carried by the events. Watermarks estimate how far event time has progressed, allowing Flink to close windows while still tolerating bounded late arrivals.",
+    "pattern": "Event time + watermarks",
+    "use": "IoT telemetry, delayed edge uploads, real-time Guest-media pipelines",
+    "code": "WatermarkStrategy.<Event>forBoundedOutOfOrderness(Duration.ofSeconds(30))"
+  },
+  {
+    "id": "dxt-flink-window-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "You need a count of attraction-media events per device every five minutes, updated continuously. Which stream-processing concept is central?",
+    "choices": [
+      "Keyed time windows",
+      "Binary-tree inorder traversal",
+      "One global database transaction",
+      "CSS media queries"
+    ],
+    "answer": 0,
+    "explanation": "Key by device or attraction identifier, then aggregate within a time window. Windowing converts an unbounded stream into bounded slices that can be summarized and emitted.",
+    "pattern": "KeyBy + window + aggregate",
+    "use": "Telemetry aggregation, operational dashboards, media-event summaries",
+    "code": "stream.keyBy(Event::deviceId).window(TumblingEventTimeWindows.of(Duration.ofMinutes(5)))"
+  },
+  {
+    "id": "dxt-flink-checkpoint-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A Flink job restarts after a failure. What feature helps restore operator state and resume processing consistently?",
+    "choices": [
+      "Checkpointing",
+      "A larger HTML file",
+      "Removing offsets",
+      "Random retries without state"
+    ],
+    "answer": 0,
+    "explanation": "Flink checkpoints capture distributed operator state and source positions. On restart, the job restores from a completed checkpoint rather than starting from an arbitrary point.",
+    "pattern": "Checkpointed stream state",
+    "use": "Fault-tolerant real-time pipelines and stateful aggregation",
+    "code": "env.enableCheckpointing(30_000);"
+  },
+  {
+    "id": "dxt-flink-backpressure-1",
+    "category": "Streaming",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A downstream enrichment operator cannot keep up with incoming edge events. What condition should you investigate first?",
+    "choices": [
+      "Backpressure and the slow operator's throughput",
+      "Whether the UI button has rounded corners",
+      "Whether every event can be put into one giant transaction",
+      "Whether logs should be disabled"
+    ],
+    "answer": 0,
+    "explanation": "Backpressure means downstream processing capacity is lower than upstream production. Inspect operator throughput, latency, queueing, serialization, external calls, and partitioning before simply adding retries.",
+    "pattern": "Backpressure diagnosis",
+    "use": "High-throughput stream pipelines and overloaded enrichments"
+  },
+  {
+    "id": "dxt-flink-state-1",
+    "category": "Streaming",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "You must correlate a Guest media event with a later identity event using a device identifier. What is the most relevant Flink capability?",
+    "choices": [
+      "Keyed state with timers or stateful joins",
+      "Only a stateless map operation",
+      "A CSS selector",
+      "A single local variable shared by every task"
+    ],
+    "answer": 0,
+    "explanation": "Correlation across time requires durable per-key state. Keyed state stores context for a device or identity key, while timers or windows define how long to wait before emitting or expiring unmatched records.",
+    "pattern": "Keyed state + correlation window",
+    "use": "Guest media and identity reconciliation",
+    "code": "ValueState<PendingMedia> pendingMedia;"
+  },
+  {
+    "id": "dxt-streams-vs-flink-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "When would Apache Flink be more appropriate than the Java Streams API?",
+    "choices": [
+      "When processing an unbounded distributed event stream with windows, state, checkpoints, and failure recovery",
+      "When sorting five objects already in memory",
+      "When formatting a String",
+      "When replacing all AWS services"
+    ],
+    "answer": 0,
+    "explanation": "Java Streams is an in-process collection pipeline. Flink is designed for distributed, stateful processing of continuous streams with operational recovery semantics.",
+    "pattern": "In-memory pipeline vs distributed stream processor",
+    "use": "Choosing the right tool during system design"
+  },
+  {
+    "id": "dxt-kafka-partition-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "You need ordering for all events from the same edge device while scaling consumers horizontally in Kafka. What should you do?",
+    "choices": [
+      "Use deviceId as the partition key",
+      "Send each device event to a random partition",
+      "Put the entire company on one partition forever",
+      "Remove keys from every message"
+    ],
+    "answer": 0,
+    "explanation": "Kafka guarantees ordering within a partition. A stable deviceId key routes related events to the same partition while allowing different devices to spread across partitions.",
+    "pattern": "Partition by business key",
+    "use": "Per-device ordering, scalable stream consumption",
+    "code": "new ProducerRecord<>(topic, event.deviceId(), payload)"
+  },
+  {
+    "id": "dxt-schema-evolution-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A new producer needs to add an optional field to an event consumed by older services. Which schema-evolution approach is safest?",
+    "choices": [
+      "Add a backward-compatible optional field and version or validate the schema",
+      "Rename required fields silently",
+      "Delete old fields immediately",
+      "Let each consumer guess the payload format"
+    ],
+    "answer": 0,
+    "explanation": "Versioned schemas and compatibility rules reduce consumer breakage. Adding an optional field is usually safer than removing or renaming required fields without a migration plan.",
+    "pattern": "Backward-compatible schema evolution",
+    "use": "Versioned event contracts and downstream integration"
+  },
+  {
+    "id": "dxt-dlq-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A malformed edge event keeps failing deserialization. What is the strongest operational response?",
+    "choices": [
+      "Route it to a DLQ or quarantine stream with context, alert, and continue processing healthy events",
+      "Retry forever in a tight loop",
+      "Drop every event from that device without recording it",
+      "Stop monitoring the pipeline"
+    ],
+    "answer": 0,
+    "explanation": "Poison messages should be isolated so one bad payload does not block an entire partition or consumer. Preserve enough context to diagnose, remediate, and replay safely.",
+    "pattern": "DLQ / quarantine stream",
+    "use": "Poison-message handling and controlled replay"
+  },
+  {
+    "id": "dxt-mqtt-qos-1",
+    "category": "IoT / Edge",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "An MQTT client uses QoS 1 delivery. What should downstream consumers assume?",
+    "choices": [
+      "A message may arrive more than once, so processing must be idempotent",
+      "A message can never be duplicated",
+      "Ordering across every device is globally perfect",
+      "No acknowledgement exists"
+    ],
+    "answer": 0,
+    "explanation": "MQTT QoS 1 is at-least-once delivery. The receiver acknowledges delivery, but duplicates are possible, especially around reconnects or retries.",
+    "pattern": "At-least-once edge delivery",
+    "use": "MQTT ingestion and duplicate-safe consumers"
+  },
+  {
+    "id": "dxt-edge-offline-1",
+    "category": "IoT / Edge",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A park edge device can temporarily lose connectivity. Which design best avoids losing events?",
+    "choices": [
+      "Buffer locally with durable sequence IDs, retry with backoff, and deduplicate in the cloud",
+      "Assume Wi-Fi is always perfect",
+      "Discard local events immediately",
+      "Block every Guest interaction until the cloud responds"
+    ],
+    "answer": 0,
+    "explanation": "Edge systems must tolerate intermittent connectivity. Local buffering plus stable IDs or sequence numbers supports retries, ordering checks, deduplication, and later reconciliation.",
+    "pattern": "Store-and-forward edge design",
+    "use": "Park devices, kiosks, sensors, and offline-tolerant ingestion"
+  },
+  {
+    "id": "dxt-iot-auth-1",
+    "category": "IoT / Edge",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "What is a strong default for authenticating edge devices to a cloud ingestion service?",
+    "choices": [
+      "Unique per-device credentials or certificates with least-privilege policies and rotation",
+      "One shared password hard-coded into every device",
+      "Public anonymous write access",
+      "Credentials committed to source control"
+    ],
+    "answer": 0,
+    "explanation": "Per-device identity limits blast radius and supports revocation, auditability, and rotation. Least privilege ensures devices can publish only to the resources they need.",
+    "pattern": "Per-device identity + least privilege",
+    "use": "AWS IoT, MQTT clients, edge security"
+  },
+  {
+    "id": "dxt-iot-sequence-1",
+    "category": "IoT / Edge",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Why include a device sequence number in edge events?",
+    "choices": [
+      "To detect gaps, duplicates, and out-of-order delivery",
+      "To make the JSON prettier",
+      "To replace all timestamps",
+      "To avoid authentication"
+    ],
+    "answer": 0,
+    "explanation": "A monotonic sequence per device provides a simple reconciliation signal. The cloud can detect missing, duplicate, or reordered observations even when connectivity is unreliable.",
+    "pattern": "Sequence-based reconciliation",
+    "use": "Edge ingestion correctness and replay diagnostics"
+  },
+  {
+    "id": "dxt-identity-recon-1",
+    "category": "Architecture",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A Guest media event arrives before identity is known. What is a robust reconciliation approach?",
+    "choices": [
+      "Store the event under a correlation key, join when identity arrives, emit a versioned reconciled event, and expire unmatched state deliberately",
+      "Throw away every unmatched event immediately",
+      "Block all ingestion until identity is known",
+      "Mutate downstream databases silently with no audit trail"
+    ],
+    "answer": 0,
+    "explanation": "Separate ingestion from reconciliation. Preserve the original event, correlate asynchronously, emit an auditable reconciled result, and define expiry or manual-review behavior for unmatched records.",
+    "pattern": "Asynchronous identity reconciliation",
+    "use": "Guest media, device association, late-arriving identity data"
+  },
+  {
+    "id": "dxt-identity-idempotency-1",
+    "category": "Architecture",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A reconciliation job reprocesses the same media-to-Guest match after a retry. How should the target system prevent duplicate side effects?",
+    "choices": [
+      "Use an idempotency key or unique constraint based on the reconciliation identity",
+      "Trust retries never happen",
+      "Append duplicate records and clean them manually later",
+      "Hold a global lock forever"
+    ],
+    "answer": 0,
+    "explanation": "Retries and replay are normal. A stable idempotency key or uniqueness rule turns repeated delivery into the same business outcome rather than duplicate state changes.",
+    "pattern": "Idempotent reconciliation write",
+    "use": "Replay-safe identity and media processing"
+  },
+  {
+    "id": "dxt-kinesis-shards-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A Kinesis stream starts throttling during peak park traffic. Which capacity concept should you inspect?",
+    "choices": [
+      "Shard count, partition-key distribution, and per-shard throughput",
+      "The font size in the dashboard",
+      "Whether every event is routed to one hot partition key",
+      "Only the EC2 instance hostname"
+    ],
+    "answer": 0,
+    "explanation": "Kinesis capacity is affected by shards and how records are distributed. A hot partition key can overload one shard even if aggregate traffic seems reasonable.",
+    "pattern": "Shard capacity + partition distribution",
+    "use": "Scaling AWS streaming ingestion during bursts"
+  },
+  {
+    "id": "dxt-dynamo-key-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "What is the biggest design risk when choosing a DynamoDB partition key for high-volume device events?",
+    "choices": [
+      "Creating hot partitions with uneven traffic",
+      "Making the table too relational",
+      "Using too many CSS classes",
+      "Not having a Java main method"
+    ],
+    "answer": 0,
+    "explanation": "A good key distributes requests evenly while still supporting access patterns. A single attraction or tenant key can become hot during bursts unless the model spreads writes deliberately.",
+    "pattern": "DynamoDB access-pattern-first key design",
+    "use": "High-volume event metadata and device state"
+  },
+  {
+    "id": "dxt-aws-lambda-vs-ecs-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Which workload is generally a better fit for ECS or EKS than Lambda?",
+    "choices": [
+      "A continuously running, stateful or high-throughput stream-processing service",
+      "A short event-triggered image resize",
+      "A lightweight scheduled cleanup",
+      "A small webhook handler"
+    ],
+    "answer": 0,
+    "explanation": "Lambda is strong for short-lived event-driven functions. Long-running stream processors with predictable throughput, connection management, and more control often fit containers better.",
+    "pattern": "Compute-platform tradeoff",
+    "use": "Choosing Lambda, ECS, or EKS for production components"
+  },
+  {
+    "id": "dxt-s3-replay-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Why might you archive raw edge events to S3 even after processing them successfully?",
+    "choices": [
+      "For replay, audit, reconciliation, and future reprocessing",
+      "To make every request slower",
+      "To replace observability",
+      "Because S3 guarantees all business logic is correct"
+    ],
+    "answer": 0,
+    "explanation": "A durable raw archive gives you a recovery path when transformations change, a defect is discovered, or downstream data must be rebuilt.",
+    "pattern": "Immutable raw-event archive",
+    "use": "Replayability, auditability, and data recovery"
+  },
+  {
+    "id": "dxt-cloudwatch-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Which telemetry set is most useful for a real-time ingestion pipeline?",
+    "choices": [
+      "Ingress rate, processing latency, consumer lag, error rate, retries, DLQ depth, and checkpoint health",
+      "Only CPU once per day",
+      "Only HTTP 200 counts",
+      "No logs because they cost money"
+    ],
+    "answer": 0,
+    "explanation": "Operational ownership requires visibility into flow, delay, failure, recovery, and backlog. Metrics should reveal both current health and whether the pipeline is falling behind.",
+    "pattern": "Pipeline observability",
+    "use": "CloudWatch dashboards, alerts, SLOs, incident response"
+  },
+  {
+    "id": "dxt-cost-1",
+    "category": "AWS",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A stream-processing design works but costs too much. What is the strongest engineering response?",
+    "choices": [
+      "Measure cost drivers, review retention and payload size, tune parallelism, reduce unnecessary calls, and validate against SLOs",
+      "Turn off monitoring first",
+      "Remove retries blindly",
+      "Assume cloud cost cannot be optimized"
+    ],
+    "answer": 0,
+    "explanation": "Cost efficiency is an architectural quality attribute. Optimize from measurements while protecting reliability and latency objectives rather than cutting blindly.",
+    "pattern": "Cost-aware architecture",
+    "use": "AWS optimization without sacrificing Guest experience"
+  },
+  {
+    "id": "dxt-observability-trace-1",
+    "category": "Architecture",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "An event travels from device to broker to processor to downstream service. What makes it easiest to trace end to end?",
+    "choices": [
+      "A correlation ID propagated through logs, metrics dimensions, and events",
+      "A different random identifier at every hop with no relationship",
+      "Only local console prints",
+      "Turning off structured logging"
+    ],
+    "answer": 0,
+    "explanation": "Correlation IDs allow responders to follow a single business flow across edge, ingestion, transformation, and downstream systems.",
+    "pattern": "End-to-end correlation ID",
+    "use": "Distributed tracing and production debugging"
+  },
+  {
+    "id": "dxt-slo-1",
+    "category": "Architecture",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "For a Guest-facing connected-products platform, what does an SLO define?",
+    "choices": [
+      "A measurable reliability or performance target such as latency or successful processing percentage",
+      "A Java class naming rule only",
+      "A requirement to use one database",
+      "A substitute for monitoring"
+    ],
+    "answer": 0,
+    "explanation": "An SLO turns reliability expectations into measurable targets. Good SLOs guide alerts, capacity planning, error budgets, and tradeoff discussions.",
+    "pattern": "Service-level objective",
+    "use": "Operational standards and high-visibility platform ownership"
+  },
+  {
+    "id": "dxt-privacy-1",
+    "category": "Security",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Guest media and identity reconciliation may involve privacy-relevant data. Which design principle is strongest?",
+    "choices": [
+      "Minimize collected data, separate identifiers where possible, encrypt data, enforce least privilege, audit access, and define retention",
+      "Copy all raw data into every downstream service",
+      "Give broad admin access to simplify debugging",
+      "Keep data forever by default"
+    ],
+    "answer": 0,
+    "explanation": "Sensitive pipelines should deliberately reduce exposure. Minimize, isolate, encrypt, authorize narrowly, audit access, and retain only as long as required.",
+    "pattern": "Privacy by design",
+    "use": "Guest identity, media metadata, secure downstream integration"
+  },
+  {
+    "id": "dxt-api-versioning-1",
+    "category": "Architecture",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A downstream consumer cannot migrate immediately when an API response changes. What is the safest strategy?",
+    "choices": [
+      "Maintain a versioned contract and a deprecation window with migration guidance",
+      "Break the consumer without notice",
+      "Change field meanings silently",
+      "Require every consumer to deploy at the same second"
+    ],
+    "answer": 0,
+    "explanation": "Versioning and deprecation windows let teams evolve independently. Communicate timelines, compatibility rules, and observability for old-version usage.",
+    "pattern": "Versioned API contract",
+    "use": "Cross-team integration and safe platform evolution"
+  },
+  {
+    "id": "dxt-lead-tradeoff-1",
+    "category": "Leadership",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Two teams disagree: one wants faster delivery, the other wants a more resilient architecture before launch. What should the lead engineer do?",
+    "choices": [
+      "Make the tradeoffs explicit, use risk and SLO data, identify a safe incremental path, document the decision, and assign follow-up work",
+      "Choose whichever team speaks loudest",
+      "Avoid making a decision",
+      "Add features until everyone forgets the issue"
+    ],
+    "answer": 0,
+    "explanation": "A hands-on lead arbitrates tradeoffs with evidence and ownership. The goal is not theoretical perfection; it is a safe, explainable delivery plan with clear residual risk.",
+    "pattern": "Cross-team tradeoff arbitration",
+    "use": "Roadmap-to-delivery ownership and conflicting priorities"
+  },
+  {
+    "id": "dxt-lead-incident-1",
+    "category": "Leadership",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A critical event pipeline is dropping records during a high-visibility incident. What is the strongest lead response?",
+    "choices": [
+      "Stabilize impact, establish incident roles, preserve data, communicate clearly, restore service, reconcile affected records, and run a blameless follow-up",
+      "Start rewriting the entire platform during the incident",
+      "Wait for someone else to own it",
+      "Focus only on who caused the problem"
+    ],
+    "answer": 0,
+    "explanation": "Operational leadership separates mitigation from root-cause work. Preserve recoverability, communicate status, restore service safely, and follow through on reconciliation and prevention.",
+    "pattern": "Incident command + reconciliation",
+    "use": "Critical platform ownership and operational outcomes"
+  },
+  {
+    "id": "dxt-system-design-1",
+    "category": "Architecture",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "You are designing a platform for edge-device events that become Guest-media events. Which high-level flow is strongest?",
+    "choices": [
+      "Authenticated device ingestion -> durable stream -> validation/quarantine -> Flink transformation and reconciliation -> versioned events -> downstream consumers -> raw archive and observability",
+      "Device -> direct writes into every downstream database",
+      "One synchronous request that blocks until every downstream system succeeds",
+      "Manual spreadsheet upload only"
+    ],
+    "answer": 0,
+    "explanation": "The durable, observable event pipeline decouples producers and consumers, isolates bad data, supports replay, and lets stateful stream processing produce reliable downstream events.",
+    "pattern": "End-to-end connected-products event platform",
+    "use": "A likely system-design discussion for this role"
+  },
+  {
+    "id": "dxt-replay-selective-1",
+    "category": "Architecture",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "A transformation bug affected only two hours of events for one attraction. What is the safest replay strategy?",
+    "choices": [
+      "Fix and deploy the processor, replay the affected scope into idempotent consumers, monitor results, and reconcile against the source of truth",
+      "Replay every historical event blindly",
+      "Delete the raw archive",
+      "Disable duplicate protection"
+    ],
+    "answer": 0,
+    "explanation": "Selective replay limits blast radius. Correct the defect first, target the known window or keys, ensure idempotency, and verify downstream state after processing.",
+    "pattern": "Scoped replay + reconciliation",
+    "use": "Production repair without creating a second incident"
+  },
+  {
+    "id": "dxt-flink-late-data-1",
+    "category": "Streaming",
+    "difficulty": "Boss",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Some valid events arrive after a Flink window has emitted its result. What should the design decide explicitly?",
+    "choices": [
+      "Allowed lateness and whether to update results, route late events to a side output, or reconcile later",
+      "That late events are impossible",
+      "That every window stays open forever",
+      "That timestamps should be removed"
+    ],
+    "answer": 0,
+    "explanation": "Late data is a business decision as much as a technical one. Define a bounded tolerance and a clear handling path so results remain explainable and operationally manageable.",
+    "pattern": "Late-data policy",
+    "use": "Event-time windows and delayed edge uploads"
+  },
+  {
+    "id": "dxt-schema-registry-1",
+    "category": "Streaming",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "What is the main benefit of a schema registry in an event-driven platform?",
+    "choices": [
+      "It centralizes event schema definitions and compatibility validation for producers and consumers",
+      "It stores every binary attachment forever",
+      "It replaces all monitoring",
+      "It guarantees business requirements never change"
+    ],
+    "answer": 0,
+    "explanation": "A schema registry makes contracts discoverable and enforceable. Compatibility checks catch unsafe changes before they break downstream consumers.",
+    "pattern": "Schema registry + compatibility checks",
+    "use": "Clean, versioned event schemas across teams"
+  },
+  {
+    "id": "dxt-java-threadpool-1",
+    "category": "Java",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Why use a bounded queue with an ExecutorService for a high-volume ingestion worker pool?",
+    "choices": [
+      "To apply backpressure and avoid unbounded memory growth when producers outrun workers",
+      "To guarantee every task completes instantly",
+      "To remove the need for metrics",
+      "To make thread count irrelevant"
+    ],
+    "answer": 0,
+    "explanation": "A bounded queue makes overload visible and forces an explicit rejection or throttling policy instead of allowing memory usage to grow without limit.",
+    "pattern": "Bounded worker queue + rejection policy",
+    "use": "Java ingestion workers and controlled overload behavior",
+    "code": "new ThreadPoolExecutor(core, max, 60, SECONDS, new ArrayBlockingQueue<>(capacity), handler)"
+  },
+  {
+    "id": "dxt-java-ordering-1",
+    "category": "Java",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Multiple worker threads process events for the same device. What risk appears if per-device ordering matters?",
+    "choices": [
+      "Concurrent workers may reorder related events unless work is partitioned or serialized by key",
+      "Java automatically guarantees global order across all threads",
+      "The database will always infer the correct sequence",
+      "No risk exists if events contain strings"
+    ],
+    "answer": 0,
+    "explanation": "Concurrency improves throughput but can violate ordering. Route the same key to the same partition, use keyed processing, or serialize per-key work where the business requires it.",
+    "pattern": "Concurrency vs key ordering",
+    "use": "Per-device event processing correctness"
+  },
+  {
+    "id": "dxt-timestream-1",
+    "category": "AWS",
+    "difficulty": "Core",
+    "track": "DXT",
+    "type": "multiple",
+    "prompt": "Which data shape is a natural fit for a time-series database such as Timestream or InfluxDB?",
+    "choices": [
+      "Timestamped device measurements queried over time ranges",
+      "A static CSS stylesheet",
+      "A single immutable logo file",
+      "An unstructured interview transcript only"
+    ],
+    "answer": 0,
+    "explanation": "Time-series databases are optimized for measurements indexed by time, device, and dimensions, with queries such as trends, rollups, and recent windows.",
+    "pattern": "Time-series storage",
+    "use": "Sensor telemetry, device-health metrics, operational analytics"
   }
 ];

@@ -7,6 +7,7 @@ A mobile-first Progressive Web App (PWA) generated from the Java Senior Software
 - Quick Drill: 5 mixed questions
 - Pattern Match: algorithm and Java rounds
 - Architecture Run: Spring and distributed-systems rounds
+- Connected Products Run: 12 role-specific DXT technical questions
 - Boss Battle: 12 questions with 3 hearts
 - Study Deck with explanations and code snippets
 - XP, level, streak, and mastered-question progress saved in `localStorage`
@@ -39,3 +40,7 @@ In Safari on the iPhone:
 4. Launch **Interview Quest** from the new icon.
 
 No backend or build step is required.
+
+## DXT role-specific expansion
+
+The game includes a tailored Connected Products question pool covering Apache Flink, IoT and edge ingestion, AWS streaming architecture, Guest-media identity reconciliation, schema evolution, replay, privacy, observability, and cross-team technical leadership. See `DXT_CONNECTED_PRODUCTS_TECHNICAL_GUIDE.md`.
