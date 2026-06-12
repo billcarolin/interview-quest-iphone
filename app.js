@@ -17,6 +17,7 @@ function selectQuestions(mode){
  let pool=bank, count=5, hearts=99;
  if(mode==='patterns'){pool=bank.filter(q=>['Algorithms','Java'].includes(q.category));count=8;}
  if(mode==='architecture'){pool=bank.filter(q=>['Architecture','Spring'].includes(q.category));count=8;}
+ if(mode==='dxt'){pool=bank.filter(q=>q.track==='DXT');count=12;}
  if(mode==='boss'){pool=bank.filter(q=>q.difficulty!=='Warm-up');count=12;hearts=3;}
  return {items:shuffle(pool).slice(0,Math.min(count,pool.length)),hearts};
 }
