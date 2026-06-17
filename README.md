@@ -8,6 +8,8 @@ A mobile-first Progressive Web App (PWA) generated from the Java Senior Software
 - Pattern Match: algorithm and Java rounds
 - Architecture Run: Spring and distributed-systems rounds
 - Connected Products Run: 12 role-specific DXT technical questions
+- Technical Refresh: second-round questions on Java Streams, concurrency, collections, Spring Boot, REST, SQL, event-driven architecture, system design, RAG, and Agentic AI
+- Code Review Mode: snippet-based bug hunts and best-answer questions
 - Boss Battle: 12 questions with 3 hearts
 - Study Deck with explanations and code snippets
 - XP, level, streak, and mastered-question progress saved in `localStorage`

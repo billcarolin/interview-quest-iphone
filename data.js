@@ -1116,5 +1116,426 @@ window.QUESTION_BANK = [
     "explanation": "Time-series databases are optimized for measurements indexed by time, device, and dimensions, with queries such as trends, rollups, and recent windows.",
     "pattern": "Time-series storage",
     "use": "Sensor telemetry, device-health metrics, operational analytics"
+  },
+  {
+    "id": "refresh-streams-1",
+    "category": "Java Streams",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is wrong with this Java Stream code?",
+    "code": "List<String> names = users.stream()\n    .map(user -> user.getName())\n    .filter(name -> name.length() > 3)\n    .collect(Collectors.toList());",
+    "choices": [
+      "It can throw NullPointerException if user or name is null",
+      "Collectors.toList() is invalid",
+      "map() must always come after filter()",
+      "Streams cannot process Strings"
+    ],
+    "answer": 0,
+    "explanation": "If user is null or getName() returns null, name.length() can throw NullPointerException. Filter nulls before dereferencing.",
+    "pattern": "Java Streams",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-streams-2",
+    "category": "Java Streams",
+    "difficulty": "Best snippet",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Which snippet safely collects active user emails?",
+    "choices": [
+      "users.stream()\n    .map(User::getEmail)\n    .collect(Collectors.toList());",
+      "users.stream()\n    .filter(Objects::nonNull)\n    .filter(User::isActive)\n    .map(User::getEmail)\n    .filter(Objects::nonNull)\n    .collect(Collectors.toList());",
+      "users.map(User::getEmail).collect();",
+      "users.stream()\n    .collect(User::getEmail);"
+    ],
+    "answer": 1,
+    "explanation": "The best version filters null users, filters active users, maps emails, removes null emails, and collects results.",
+    "pattern": "Java Streams",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-streams-3",
+    "category": "Java Streams",
+    "difficulty": "What happens?",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What does this print?",
+    "code": "List<Integer> nums = List.of(1, 2, 3, 4);\nint result = nums.stream()\n    .filter(n -> n % 2 == 0)\n    .mapToInt(n -> n * 10)\n    .sum();\nSystem.out.println(result);",
+    "choices": ["20", "40", "60", "100"],
+    "answer": 2,
+    "explanation": "The even numbers are 2 and 4. They become 20 and 40. The sum is 60.",
+    "pattern": "Java Streams",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-concurrency-1",
+    "category": "Concurrency",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is the bug in this counter?",
+    "code": "private int count = 0;\n\npublic void increment() {\n    count++;\n}",
+    "choices": [
+      "count++ is not atomic",
+      "int cannot be incremented",
+      "The method must return int",
+      "The variable must be public"
+    ],
+    "answer": 0,
+    "explanation": "count++ is read-modify-write. In multithreaded code, use AtomicInteger, synchronization, or a lock.",
+    "pattern": "Concurrency",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-concurrency-2",
+    "category": "Concurrency",
+    "difficulty": "Best snippet",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Which is the safest simple counter for concurrent access?",
+    "choices": [
+      "private int count;\npublic void increment() { count++; }",
+      "private final AtomicInteger count = new AtomicInteger(0);\npublic void increment() { count.incrementAndGet(); }",
+      "private Integer count = 0;\npublic void increment() { count++; }",
+      "private volatile int count;\npublic void increment() { count++; }"
+    ],
+    "answer": 1,
+    "explanation": "AtomicInteger makes the increment atomic. volatile improves visibility but does not make count++ atomic.",
+    "pattern": "Concurrency",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-concurrency-3",
+    "category": "Concurrency",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is the main problem with this ExecutorService code?",
+    "code": "ExecutorService executor = Executors.newFixedThreadPool(4);\nexecutor.submit(() -> processOrder(order));",
+    "choices": [
+      "The executor is never shut down",
+      "Fixed thread pools cannot run lambdas",
+      "submit always blocks forever",
+      "processOrder must be static"
+    ],
+    "answer": 0,
+    "explanation": "Long-lived app-managed executors need lifecycle management. For short-lived use, shut down the executor or use framework-managed pools.",
+    "pattern": "Concurrency",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-collections-1",
+    "category": "Collections",
+    "difficulty": "What happens?",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What prints here?",
+    "code": "Map<String, Integer> map = new HashMap<>();\nmap.put(\"a\", 1);\nmap.put(\"a\", 2);\nSystem.out.println(map.get(\"a\"));",
+    "choices": ["1", "2", "null", "Compilation error"],
+    "answer": 1,
+    "explanation": "HashMap keys are unique. The second put replaces the value for key \"a\".",
+    "pattern": "Collections",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-collections-2",
+    "category": "Collections",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is the likely runtime issue?",
+    "code": "List<String> names = new ArrayList<>();\nnames.add(\"Bill\");\nnames.add(\"Nick\");\n\nfor (String name : names) {\n    if (name.startsWith(\"B\")) {\n        names.remove(name);\n    }\n}",
+    "choices": [
+      "ConcurrentModificationException",
+      "NullPointerException",
+      "StackOverflowError",
+      "No issue"
+    ],
+    "answer": 0,
+    "explanation": "Removing during enhanced for-loop iteration can cause ConcurrentModificationException. Use Iterator.remove() or removeIf().",
+    "pattern": "Collections",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-spring-1",
+    "category": "Spring Boot",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Why might this dependency be null?",
+    "code": "@RestController\npublic class UserController {\n    private UserService userService;\n\n    public List<User> getUsers() {\n        return userService.findAll();\n    }\n}",
+    "choices": [
+      "UserService was never injected",
+      "RestController cannot use services",
+      "findAll() must be static",
+      "List cannot be returned from a controller"
+    ],
+    "answer": 0,
+    "explanation": "The field is never injected. Prefer constructor injection with a final field.",
+    "pattern": "Spring Boot",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-spring-2",
+    "category": "Spring Boot",
+    "difficulty": "Best snippet",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Which is preferred constructor injection?",
+    "choices": [
+      "@Autowired\nprivate UserService userService;",
+      "private final UserService userService;\n\npublic UserController(UserService userService) {\n    this.userService = userService;\n}",
+      "private UserService userService = new UserService();",
+      "public UserController() {}"
+    ],
+    "answer": 1,
+    "explanation": "Constructor injection makes dependencies explicit, testable, and compatible with final fields.",
+    "pattern": "Spring Boot",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-rest-1",
+    "category": "REST API Design",
+    "difficulty": "Best answer",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Which endpoint is most RESTful for partially updating a user email?",
+    "choices": [
+      "GET /updateUserEmail?id=123",
+      "POST /userEmailUpdate",
+      "PATCH /users/123",
+      "DELETE /users/123/email"
+    ],
+    "answer": 2,
+    "explanation": "PATCH /users/123 is appropriate for a partial update to the user resource.",
+    "pattern": "REST API Design",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-sql-1",
+    "category": "SQL",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What problem can this query cause?",
+    "code": "SELECT *\nFROM orders\nWHERE YEAR(created_at) = 2026;",
+    "choices": [
+      "It may prevent index usage on created_at",
+      "YEAR() is not allowed in SQL",
+      "SELECT * always fails",
+      "WHERE cannot use dates"
+    ],
+    "answer": 0,
+    "explanation": "Wrapping an indexed column in a function can make the predicate non-sargable. Prefer a date range.",
+    "pattern": "SQL",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-sql-2",
+    "category": "SQL",
+    "difficulty": "Best snippet",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "Which query is more index-friendly?",
+    "choices": [
+      "SELECT *\nFROM orders\nWHERE YEAR(created_at) = 2026;",
+      "SELECT *\nFROM orders\nWHERE created_at >= '2026-01-01'\n  AND created_at < '2027-01-01';",
+      "SELECT *\nFROM orders\nWHERE created_at LIKE '2026%';",
+      "SELECT *\nFROM orders\nORDER BY created_at;"
+    ],
+    "answer": 1,
+    "explanation": "A range predicate can use an index on created_at efficiently.",
+    "pattern": "SQL",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-eda-1",
+    "category": "Event-Driven Architecture",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is the architectural risk?",
+    "code": "orderRepository.save(order);\npaymentEventPublisher.publish(new PaymentRequestedEvent(order.getId()));",
+    "choices": [
+      "The database save may succeed but event publishing may fail",
+      "Events cannot contain IDs",
+      "Repositories cannot be used before publishers",
+      "This must be synchronous REST"
+    ],
+    "answer": 0,
+    "explanation": "This can create inconsistency. The transactional outbox pattern helps coordinate state changes and events.",
+    "pattern": "Event-Driven Architecture",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-sysdesign-1",
+    "category": "System Design",
+    "difficulty": "Best answer",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "A service receives duplicate events. What should you design for?",
+    "choices": [
+      "Assume duplicates never happen",
+      "Make consumers idempotent",
+      "Restart Kafka",
+      "Use only synchronous APIs"
+    ],
+    "answer": 1,
+    "explanation": "Distributed systems often produce duplicate messages. Consumers should safely handle repeated events.",
+    "pattern": "System Design",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-agentic-1",
+    "category": "Agentic AI",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "What is risky about this agent design?",
+    "code": "const answer = await llm.call(userPrompt);\nawait database.run(answer);",
+    "choices": [
+      "The LLM output is being executed without validation",
+      "LLMs cannot access databases",
+      "The database must call the LLM first",
+      "await cannot be used here"
+    ],
+    "answer": 0,
+    "explanation": "Never blindly execute LLM output. Use tool schemas, validation, permissions, and human review for risky actions.",
+    "pattern": "Agentic AI",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "refresh-rag-1",
+    "category": "RAG",
+    "difficulty": "Best answer",
+    "track": "Refresh",
+    "section": "Technical Refresh",
+    "type": "multiple",
+    "prompt": "A RAG answer is confidently wrong. What should you check first?",
+    "choices": [
+      "Whether retrieval returned the right source chunks",
+      "Whether the frontend is React",
+      "Whether the database is relational",
+      "Whether the model has enough RAM"
+    ],
+    "answer": 0,
+    "explanation": "Bad retrieval often causes bad grounded answers. Inspect retrieved chunks, ranking, chunking, metadata filters, and reranking.",
+    "pattern": "RAG",
+    "use": "Technical Refresh"
+  },
+  {
+    "id": "review-completablefuture-1",
+    "category": "CompletableFuture",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Code Review Mode",
+    "type": "multiple",
+    "prompt": "What is the hidden issue?",
+    "code": "CompletableFuture.supplyAsync(() -> callRemoteService())\n    .thenApply(response -> transform(response));",
+    "choices": [
+      "No error handling path is defined",
+      "thenApply cannot transform values",
+      "supplyAsync is synchronous",
+      "CompletableFuture requires Spring Boot"
+    ],
+    "answer": 0,
+    "explanation": "In real systems, add exceptionally/handle/whenComplete, timeouts, and consider a custom executor.",
+    "pattern": "CompletableFuture",
+    "use": "Code Review Mode"
+  },
+  {
+    "id": "review-hashmap-1",
+    "category": "HashMap",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Code Review Mode",
+    "type": "multiple",
+    "prompt": "Why is this broken as a cache key?",
+    "code": "class UserKey {\n    String tenantId;\n    String userId;\n}\n\nMap<UserKey, User> cache = new HashMap<>();",
+    "choices": [
+      "UserKey does not override equals() and hashCode()",
+      "HashMap cannot use objects as keys",
+      "Map values cannot be User objects",
+      "tenantId must be an int"
+    ],
+    "answer": 0,
+    "explanation": "HashMap key lookup depends on equals and hashCode. Without them, logically identical keys may not match.",
+    "pattern": "HashMap",
+    "use": "Code Review Mode"
+  },
+  {
+    "id": "review-sqljoins-1",
+    "category": "SQL Joins",
+    "difficulty": "Best answer",
+    "track": "Refresh",
+    "section": "Code Review Mode",
+    "type": "multiple",
+    "prompt": "You need all users, even users with no orders. Which join?",
+    "choices": [
+      "INNER JOIN orders",
+      "LEFT JOIN orders",
+      "RIGHT JOIN users",
+      "CROSS JOIN orders"
+    ],
+    "answer": 1,
+    "explanation": "LEFT JOIN keeps all rows from users and matches orders when present.",
+    "pattern": "SQL Joins",
+    "use": "Code Review Mode"
+  },
+  {
+    "id": "review-spring-tx-1",
+    "category": "Spring Transactions",
+    "difficulty": "Find the bug",
+    "track": "Refresh",
+    "section": "Code Review Mode",
+    "type": "multiple",
+    "prompt": "Why might @Transactional not apply here?",
+    "code": "@Service\npublic class BillingService {\n    public void bill() {\n        saveInvoice();\n    }\n\n    @Transactional\n    public void saveInvoice() {\n        invoiceRepository.save(invoice);\n    }\n}",
+    "choices": [
+      "Self-invocation bypasses the Spring proxy",
+      "@Transactional only works on controllers",
+      "Repositories cannot be transactional",
+      "The method name is too long"
+    ],
+    "answer": 0,
+    "explanation": "Spring proxy-based AOP does not intercept a method call from the same instance. Put the transactional method on another bean or annotate the outer method.",
+    "pattern": "Spring Transactions",
+    "use": "Code Review Mode"
+  },
+  {
+    "id": "review-rest-status-1",
+    "category": "REST Status Codes",
+    "difficulty": "Best answer",
+    "track": "Refresh",
+    "section": "Code Review Mode",
+    "type": "multiple",
+    "prompt": "A POST creates a resource successfully. Best status code?",
+    "choices": [
+      "200 OK only",
+      "201 Created",
+      "404 Not Found",
+      "409 Conflict always"
+    ],
+    "answer": 1,
+    "explanation": "201 Created is the clean REST response for successful resource creation, usually with a Location header.",
+    "pattern": "REST Status Codes",
+    "use": "Code Review Mode"
   }
 ];
