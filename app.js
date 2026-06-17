@@ -19,6 +19,8 @@ function selectQuestions(mode){
  if(mode==='patterns'){pool=bank.filter(q=>['Algorithms','Java'].includes(q.category));count=8;}
  if(mode==='architecture'){pool=bank.filter(q=>['Architecture','Spring'].includes(q.category));count=8;}
  if(mode==='dxt'){pool=bank.filter(q=>q.track==='DXT');count=12;}
+ if(mode==='refresh'){pool=bank.filter(q=>q.section==='Technical Refresh');count=pool.length;}
+ if(mode==='review'){pool=bank.filter(q=>q.section==='Code Review Mode');count=pool.length;}
  if(mode==='boss'){pool=bank.filter(q=>q.difficulty!=='Warm-up');count=12;hearts=3;}
  return {items:shuffle(pool).slice(0,Math.min(count,pool.length)),hearts};
 }
@@ -26,7 +28,8 @@ function startGame(mode){ const pick=selectQuestions(mode); game={mode,questions
 function renderQuestion(){
  const q=game.questions[game.index]; game.answered=false; $('feedbackCard').className='card feedback hidden'; $('choiceList').innerHTML=''; $('categoryPill').textContent=q.category; $('difficultyPill').textContent=q.difficulty; $('questionText').textContent=q.prompt;
  $('progressBar').style.width=`${(game.index/game.questions.length)*100}%`; $('hearts').textContent=game.hearts<10?'❤️'.repeat(Math.max(0,game.hearts)):'';
- q.choices.forEach((text,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='choice'; b.textContent=text; b.addEventListener('click',()=>answer(i,b)); $('choiceList').appendChild(b); });
+ const qpre=$('questionCode'); if(q.code){qpre.classList.remove('hidden');qpre.querySelector('code').textContent=q.code;}else qpre.classList.add('hidden');
+ q.choices.forEach((text,i)=>{ const b=document.createElement('button'); b.type='button'; b.className=`choice${/\n/.test(text)?' code-choice':''}`; b.textContent=text; b.addEventListener('click',()=>answer(i,b)); $('choiceList').appendChild(b); });
 }
 function answer(i){
  if(game.answered)return; game.answered=true; const q=game.questions[game.index]; const ok=i===q.answer; const buttons=[...document.querySelectorAll('.choice')]; buttons.forEach((b,idx)=>{b.disabled=true;if(idx===q.answer)b.classList.add('correct');if(idx===i&&!ok)b.classList.add('wrong');});
