@@ -28,6 +28,7 @@ function startGame(mode){ const pick=selectQuestions(mode); game={mode,questions
 function renderQuestion(){
  const q=game.questions[game.index]; game.answered=false; $('feedbackCard').className='card feedback hidden'; $('choiceList').innerHTML=''; $('categoryPill').textContent=q.category; $('difficultyPill').textContent=q.difficulty; $('questionText').textContent=q.prompt;
  $('progressBar').style.width=`${(game.index/game.questions.length)*100}%`; $('hearts').textContent=game.hearts<10?'❤️'.repeat(Math.max(0,game.hearts)):'';
+ const qpre=$('questionCode'); if(q.code){qpre.classList.remove('hidden');qpre.querySelector('code').textContent=q.code;}else qpre.classList.add('hidden');
  q.choices.forEach((text,i)=>{ const b=document.createElement('button'); b.type='button'; b.className=`choice${/\n/.test(text)?' code-choice':''}`; b.textContent=text; b.addEventListener('click',()=>answer(i,b)); $('choiceList').appendChild(b); });
 }
 function answer(i){
